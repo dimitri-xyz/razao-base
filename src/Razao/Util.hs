@@ -4,6 +4,11 @@ module Razao.Util
   , round2dp
   , round5dp
   , round8dp
+  , format2dp
+  , format5dp
+  , format8dp
+  , maybePositive
+  , backtrackCursor
   ) where
 
 import Prelude.Extended
