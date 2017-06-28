@@ -1,5 +1,7 @@
 module Razao.Util
-  ( floor2dp
+  ( throwIfNothing
+  , throwIfLeft
+  , floor2dp
   , ceil2dp
   , round2dp
   , round5dp
@@ -14,6 +16,16 @@ module Razao.Util
 import Prelude.Extended
 import Data.Foldable
 import Text.Printf (printf)
+
+import Control.Exception
+
+throwIfNothing :: Exception e => e -> Maybe a -> IO a
+throwIfNothing _ (Just a)  = return a
+throwIfNothing e (Nothing) = throwIO e
+
+throwIfLeft :: Exception e => (l -> e) -> Either l r -> IO r
+throwIfLeft _ (Right r) = return r
+throwIfLeft f (Left  l) = throwIO (f l)
 
 floor2dp :: (Fractional a, RealFrac a) => a -> a
 floor2dp = floorToXdp 2
