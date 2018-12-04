@@ -1,5 +1,5 @@
 name:                razao-base
-version:             1.0.0.0
+version:             1.0.0.1
 synopsis:            Extended functionality for base package
 description:
   This package extends some of the standard modules included in base to
