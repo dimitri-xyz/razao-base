@@ -6,25 +6,45 @@ module Prelude.Extended
  , floorToXdp
  , ceilToXdp
  , truncToXdp
+ , roundToDenominator
+ , floorToDenominator
+ , ceilToDenominator
+ , truncToDenominator
  ) where
 
 import Prelude
 
 zoomInOut
-  :: (Fractional a, RealFrac a, Integral b, Integral n)
+  :: (Fractional a, RealFrac a, Integral b)
   => (a -> b)
-  -> n
+  -> a
   -> (a -> a)
-zoomInOut f n x = fromInteger (toInteger (f $ (10^n) * x)) / (10^n)
+zoomInOut f n x = fromInteger (toInteger (f $ n * x)) / n
+
+----
+
+roundToDenominator :: (Fractional a, RealFrac a, Integral n) => n -> a -> a
+roundToDenominator n = zoomInOut round (realToFrac n)
+
+floorToDenominator :: (Fractional a, RealFrac a, Integral n) => n -> a -> a
+floorToDenominator n = zoomInOut floor (realToFrac n)
+
+ceilToDenominator :: (Fractional a, RealFrac a, Integral n) => n -> a -> a
+ceilToDenominator n = zoomInOut ceiling (realToFrac n)
+
+truncToDenominator :: (Fractional a, RealFrac a, Integral n) => n -> a -> a
+truncToDenominator n = zoomInOut truncate (realToFrac n)
+
+----
 
 roundToXdp :: (Fractional a, RealFrac a, Integral n) => n -> a -> a
-roundToXdp n = zoomInOut round n
+roundToXdp n = roundToDenominator (10^n)
 
 floorToXdp :: (Fractional a, RealFrac a, Integral n) => n -> a -> a
-floorToXdp n = zoomInOut floor n
+floorToXdp n = floorToDenominator (10^n)
 
 ceilToXdp :: (Fractional a, RealFrac a, Integral n) => n -> a -> a
-ceilToXdp n = zoomInOut ceiling n
+ceilToXdp n = ceilToDenominator (10^n)
 
 truncToXdp :: (Fractional a, RealFrac a, Integral n) => n -> a -> a
-truncToXdp n = zoomInOut truncate n
+truncToXdp n = truncToDenominator (10^n)
